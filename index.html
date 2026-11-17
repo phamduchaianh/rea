@@ -1,372 +1,530 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>REA — Personal Device Ecosystem</title>
-  
-  <!-- Google Fonts: Silkscreen & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app-layout">
-    
-    <!-- Top Navigation Header -->
-    <header class="app-header">
-      <div class="brand-cluster">
-        <div class="brand-avatar" aria-hidden="true">
-          <span class="pixel-cube"></span>
-        </div>
-        <div class="brand-titles">
-          <h1 class="brand-name">REA</h1>
-          <span class="brand-tagline">PERSONAL ECOSYSTEM v0.1</span>
-        </div>
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REA — Personal Device Ecosystem</title>
 
-      <!-- Navigation Tabs -->
-      <nav class="nav-tabs" aria-label="Main Navigation">
-        <button type="button" class="tab-btn active" data-view="dashboard">
-          <span class="tab-indicator"></span>
-          <span class="tab-label">DASHBOARD</span>
-        </button>
-        <button type="button" class="tab-btn" data-view="devices">
-          <span class="tab-indicator"></span>
-          <span class="tab-label">DEVICES</span>
-          <span class="badge" id="nav-device-count">0</span>
-        </button>
-        <button type="button" class="tab-btn" data-view="network">
-          <span class="tab-indicator"></span>
-          <span class="tab-label">NETWORK</span>
-        </button>
-        <button type="button" class="tab-btn" data-view="services">
-          <span class="tab-indicator"></span>
-          <span class="tab-label">SERVICES</span>
-          <span class="badge" id="nav-service-count">0</span>
-        </button>
-      </nav>
+    <!-- Google Fonts: Silkscreen & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-      <!-- Global Actions & Status Pill -->
-      <div class="header-meta">
-        <div class="gateway-live-pill" id="global-ping-pill" title="Gateway connection active">
-          <span class="pulse-dot"></span>
-          <span class="pill-text" id="global-ping-text">LAN: 14ms</span>
-        </div>
-        <button type="button" class="btn btn-secondary btn-sm" id="reset-demo-btn" title="Reset LocalStorage to seeded demo state">
-          RESET DEMO
-        </button>
-      </div>
-    </header>
-
-    <!-- Main Content Stage -->
-    <main class="main-content" id="main-content">
-      
-      <!-- VIEW 1: DASHBOARD -->
-      <section class="view-panel active" id="view-dashboard" data-panel="dashboard">
-        <!-- KPI Metric Row -->
-        <div class="kpi-grid">
-          <div class="kpi-card" id="kpi-devices">
-            <div class="kpi-header">
-              <span class="kpi-label">ONLINE DEVICES</span>
-              <span class="kpi-icon">💻</span>
-            </div>
-            <div class="kpi-value-row">
-              <span class="kpi-number" id="kpi-online-count">0</span>
-              <span class="kpi-sub" id="kpi-total-devices">/ 0 TOTAL</span>
-            </div>
-            <div class="kpi-footer-bar">
-              <div class="segment-bar" id="kpi-device-meter" data-segments="10"></div>
-            </div>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Top Navigation Header -->
+      <header class="app-header">
+        <div class="brand-cluster">
+          <div class="brand-avatar" aria-hidden="true">
+            <span class="pixel-cube"></span>
           </div>
-
-          <div class="kpi-card" id="kpi-network">
-            <div class="kpi-header">
-              <span class="kpi-label">NETWORK STATUS</span>
-              <span class="kpi-icon">🌐</span>
-            </div>
-            <div class="kpi-value-row">
-              <span class="kpi-badge status-online" id="kpi-net-status">CONNECTED</span>
-              <span class="kpi-sub" id="kpi-net-latency">14ms ping</span>
-            </div>
-            <div class="kpi-meta-detail">
-              <span class="mono-label" id="kpi-net-ssid">Home Wi-Fi</span>
-              <span class="mono-val" id="kpi-net-ip">192.168.1.1</span>
-            </div>
-          </div>
-
-          <div class="kpi-card" id="kpi-services">
-            <div class="kpi-header">
-              <span class="kpi-label">ACTIVE SERVICES</span>
-              <span class="kpi-icon">⚡</span>
-            </div>
-            <div class="kpi-value-row">
-              <span class="kpi-number" id="kpi-service-count">0</span>
-              <span class="kpi-sub" id="kpi-total-services">/ 0 RUNNING</span>
-            </div>
-            <div class="kpi-footer-bar">
-              <div class="segment-bar" id="kpi-service-meter" data-segments="10"></div>
-            </div>
+          <div class="brand-titles">
+            <h1 class="brand-name">REA</h1>
+            <span class="brand-tagline">PERSONAL ECOSYSTEM v0.1</span>
           </div>
         </div>
 
-        <!-- Dashboard Split Grid -->
-        <div class="dashboard-split-grid">
-          <!-- Quick Device Status Grid -->
-          <div class="tactile-card quick-devices-card">
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs" aria-label="Main Navigation">
+          <button type="button" class="tab-btn active" data-view="dashboard">
+            <span class="tab-indicator"></span>
+            <span class="tab-label">DASHBOARD</span>
+          </button>
+          <button type="button" class="tab-btn" data-view="devices">
+            <span class="tab-indicator"></span>
+            <span class="tab-label">DEVICES</span>
+            <span class="badge" id="nav-device-count">0</span>
+          </button>
+          <button type="button" class="tab-btn" data-view="network">
+            <span class="tab-indicator"></span>
+            <span class="tab-label">NETWORK</span>
+          </button>
+          <button type="button" class="tab-btn" data-view="services">
+            <span class="tab-indicator"></span>
+            <span class="tab-label">SERVICES</span>
+            <span class="badge" id="nav-service-count">0</span>
+          </button>
+        </nav>
+
+        <!-- Global Actions & Status Pill -->
+        <div class="header-meta">
+          <div
+            class="gateway-live-pill"
+            id="global-ping-pill"
+            title="Gateway connection active"
+          >
+            <span class="pulse-dot"></span>
+            <span class="pill-text" id="global-ping-text">LAN: 14ms</span>
+          </div>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            id="reset-demo-btn"
+            title="Reset LocalStorage to seeded demo state"
+          >
+            RESET DEMO
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content Stage -->
+      <main class="main-content" id="main-content">
+        <!-- VIEW 1: DASHBOARD -->
+        <section
+          class="view-panel active"
+          id="view-dashboard"
+          data-panel="dashboard"
+        >
+          <!-- KPI Metric Row -->
+          <div class="kpi-grid">
+            <div class="kpi-card" id="kpi-devices">
+              <div class="kpi-header">
+                <span class="kpi-label">ONLINE DEVICES</span>
+                <span class="kpi-icon">💻</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-number" id="kpi-online-count">0</span>
+                <span class="kpi-sub" id="kpi-total-devices">/ 0 TOTAL</span>
+              </div>
+              <div class="kpi-footer-bar">
+                <div
+                  class="segment-bar"
+                  id="kpi-device-meter"
+                  data-segments="10"
+                ></div>
+              </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-network">
+              <div class="kpi-header">
+                <span class="kpi-label">NETWORK STATUS</span>
+                <span class="kpi-icon">🌐</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-badge status-online" id="kpi-net-status"
+                  >CONNECTED</span
+                >
+                <span class="kpi-sub" id="kpi-net-latency">14ms ping</span>
+              </div>
+              <div class="kpi-meta-detail">
+                <span class="mono-label" id="kpi-net-ssid">Home Wi-Fi</span>
+                <span class="mono-val" id="kpi-net-ip">192.168.1.1</span>
+              </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-services">
+              <div class="kpi-header">
+                <span class="kpi-label">ACTIVE SERVICES</span>
+                <span class="kpi-icon">⚡</span>
+              </div>
+              <div class="kpi-value-row">
+                <span class="kpi-number" id="kpi-service-count">0</span>
+                <span class="kpi-sub" id="kpi-total-services">/ 0 RUNNING</span>
+              </div>
+              <div class="kpi-footer-bar">
+                <div
+                  class="segment-bar"
+                  id="kpi-service-meter"
+                  data-segments="10"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Split Grid -->
+          <div class="dashboard-split-grid">
+            <!-- Quick Device Status Grid -->
+            <div class="tactile-card quick-devices-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="pixel-icon">🖥️</span>
+                  <h2 class="card-title">DEVICE OVERVIEW</h2>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline nav-jump-btn"
+                  data-jump="devices"
+                >
+                  VIEW ALL →
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="quick-devices-list" id="quick-devices-list">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Human-Readable Recent Activity Feed -->
+            <div class="tactile-card activity-feed-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="pixel-icon">📜</span>
+                  <h2 class="card-title">RECENT ACTIVITY</h2>
+                </div>
+                <span class="header-badge" id="activity-count-badge"
+                  >5 EVENTS</span
+                >
+              </div>
+              <div class="card-body">
+                <div class="activity-feed" id="activity-feed-list">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: DEVICES -->
+        <section class="view-panel" id="view-devices" data-panel="devices">
+          <!-- Controls Toolbar -->
+          <div class="toolbar-card">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="device-search-input"
+                placeholder="Search by name, OS, or IP..."
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label">STATUS:</span>
+              <div
+                class="segmented-control"
+                role="group"
+                aria-label="Device Status Filter"
+              >
+                <button
+                  type="button"
+                  class="filter-btn active"
+                  data-filter="all"
+                >
+                  ALL
+                </button>
+                <button type="button" class="filter-btn" data-filter="online">
+                  ONLINE
+                </button>
+                <button type="button" class="filter-btn" data-filter="offline">
+                  OFFLINE
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="open-add-device-modal"
+            >
+              <span class="btn-icon">＋</span> ADD DEVICE
+            </button>
+          </div>
+
+          <!-- Devices Block Grid -->
+          <div class="devices-grid" id="devices-grid">
+            <!-- Injected via JavaScript -->
+          </div>
+
+          <!-- Empty State (Hidden by default) -->
+          <div class="empty-state hidden" id="devices-empty-state">
+            <div class="empty-pixel-art">📦</div>
+            <h3 class="empty-title">NO DEVICES FOUND</h3>
+            <p class="empty-text">
+              No devices matched your search filter. Try clearing query or add a
+              new device.
+            </p>
+          </div>
+        </section>
+
+        <!-- VIEW 3: NETWORK -->
+        <section class="view-panel" id="view-network" data-panel="network">
+          <!-- Network Overview Primary Card -->
+          <div class="tactile-card network-primary-card">
             <div class="card-header">
               <div class="card-title-group">
-                <span class="pixel-icon">🖥️</span>
-                <h2 class="card-title">DEVICE OVERVIEW</h2>
+                <span class="pixel-icon">📡</span>
+                <h2 class="card-title">PRIMARY NETWORK INTERFACE</h2>
               </div>
-              <button type="button" class="btn btn-sm btn-outline nav-jump-btn" data-jump="devices">
-                VIEW ALL →
+              <button
+                type="button"
+                class="btn btn-sm btn-secondary"
+                id="ping-test-btn"
+              >
+                ⚡ RE-TEST LATENCY
               </button>
             </div>
             <div class="card-body">
-              <div class="quick-devices-list" id="quick-devices-list">
+              <div class="network-specs-grid" id="network-specs-container">
                 <!-- Injected via JavaScript -->
               </div>
             </div>
           </div>
 
-          <!-- Human-Readable Recent Activity Feed -->
-          <div class="tactile-card activity-feed-card">
+          <!-- Visual Block-Tree Topology -->
+          <div class="tactile-card topology-card">
             <div class="card-header">
               <div class="card-title-group">
-                <span class="pixel-icon">📜</span>
-                <h2 class="card-title">RECENT ACTIVITY</h2>
+                <span class="pixel-icon">🌲</span>
+                <h2 class="card-title">NETWORK TOPOLOGY TREE</h2>
               </div>
-              <span class="header-badge" id="activity-count-badge">5 EVENTS</span>
+              <span class="header-badge" id="topology-device-badge"
+                >LAN TREE</span
+              >
             </div>
+            <div class="card-body topology-body">
+              <div class="topology-wrapper" id="topology-tree-container">
+                <!-- Router Root Block -->
+                <div class="topology-root-container">
+                  <div class="topology-node router-node">
+                    <div class="node-antenna-row">
+                      <span class="antenna"></span>
+                      <span class="antenna"></span>
+                    </div>
+                    <div class="node-header">
+                      <span class="node-type">GATEWAY ROUTER</span>
+                      <span class="status-pip online"></span>
+                    </div>
+                    <div class="node-title" id="topo-gateway-ssid">
+                      Home Wi-Fi Gateway
+                    </div>
+                    <div class="node-meta">
+                      <span class="node-ip" id="topo-gateway-ip"
+                        >192.168.1.1</span
+                      >
+                      <span class="node-protocol">802.11ax / 5GHz</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stepped Trunk Line -->
+                <div class="topology-trunk">
+                  <div class="trunk-vertical"></div>
+                  <div class="trunk-horizontal-bar" id="trunk-horizontal"></div>
+                </div>
+
+                <!-- Leaf Device Nodes -->
+                <div class="topology-leaves-container" id="topology-leaves">
+                  <!-- Dynamically populated from JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: SERVICES -->
+        <section class="view-panel" id="view-services" data-panel="services">
+          <div class="tactile-card services-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="pixel-icon">⚙️</span>
+                <h2 class="card-title">SELF-HOSTED SERVICES REGISTRY</h2>
+              </div>
+              <span class="header-badge" id="services-badge-counter"
+                >3 ACTIVE</span
+              >
+            </div>
+
             <div class="card-body">
-              <div class="activity-feed" id="activity-feed-list">
-                <!-- Injected via JavaScript -->
+              <div class="table-container">
+                <table class="tactile-table" id="services-table">
+                  <thead>
+                    <tr>
+                      <th>SERVICE</th>
+                      <th>HOST DEVICE</th>
+                      <th>PORT</th>
+                      <th>PROTOCOL</th>
+                      <th>UPTIME</th>
+                      <th>STATUS</th>
+                      <th class="text-right">ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="services-table-body">
+                    <!-- Injected via JavaScript -->
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="footer-left">
+          <span class="footer-dot"></span>
+          <span class="footer-text"
+            >REA LOCAL ENGINE · SECURE LOCALSTORAGE STORE</span
+          >
         </div>
-      </section>
+        <div class="footer-right">
+          <span class="footer-shortcut">PRESS [ESC] TO CLOSE MODALS</span>
+        </div>
+      </footer>
+    </div>
 
-      <!-- VIEW 2: DEVICES -->
-      <section class="view-panel" id="view-devices" data-panel="devices">
-        <!-- Controls Toolbar -->
-        <div class="toolbar-card">
-          <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="device-search-input" placeholder="Search by name, OS, or IP..." autocomplete="off">
+    <!-- MODAL: ADD DEVICE -->
+    <div
+      class="modal-backdrop hidden"
+      id="add-device-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-add-title"
+    >
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="pixel-icon">➕</span>
+            <h2 class="modal-title" id="modal-add-title">
+              REGISTER NEW DEVICE
+            </h2>
           </div>
-
-          <div class="filter-group">
-            <span class="filter-label">STATUS:</span>
-            <div class="segmented-control" role="group" aria-label="Device Status Filter">
-              <button type="button" class="filter-btn active" data-filter="all">ALL</button>
-              <button type="button" class="filter-btn" data-filter="online">ONLINE</button>
-              <button type="button" class="filter-btn" data-filter="offline">OFFLINE</button>
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary" id="open-add-device-modal">
-            <span class="btn-icon">＋</span> ADD DEVICE
+          <button
+            type="button"
+            class="modal-close-btn"
+            id="close-modal-btn"
+            aria-label="Close dialog"
+          >
+            ✕
           </button>
         </div>
 
-        <!-- Devices Block Grid -->
-        <div class="devices-grid" id="devices-grid">
-          <!-- Injected via JavaScript -->
-        </div>
+        <form id="add-device-form" class="modal-form">
+          <div class="form-row">
+            <label for="dev-name" class="form-label"
+              >DEVICE NAME <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="dev-name"
+              name="name"
+              class="form-input"
+              placeholder="e.g. Raspberry Pi 5"
+              required
+              maxlength="32"
+            />
+          </div>
 
-        <!-- Empty State (Hidden by default) -->
-        <div class="empty-state hidden" id="devices-empty-state">
-          <div class="empty-pixel-art">📦</div>
-          <h3 class="empty-title">NO DEVICES FOUND</h3>
-          <p class="empty-text">No devices matched your search filter. Try clearing query or add a new device.</p>
-        </div>
-      </section>
-
-      <!-- VIEW 3: NETWORK -->
-      <section class="view-panel" id="view-network" data-panel="network">
-        <!-- Network Overview Primary Card -->
-        <div class="tactile-card network-primary-card">
-          <div class="card-header">
-            <div class="card-title-group">
-              <span class="pixel-icon">📡</span>
-              <h2 class="card-title">PRIMARY NETWORK INTERFACE</h2>
+          <div class="form-row-grid">
+            <div class="form-row">
+              <label for="dev-type" class="form-label"
+                >TYPE <span class="required">*</span></label
+              >
+              <select id="dev-type" name="type" class="form-select" required>
+                <option value="laptop">Laptop</option>
+                <option value="tablet">Tablet</option>
+                <option value="smartphone">Smartphone</option>
+                <option value="server">Server</option>
+                <option value="desktop">Desktop</option>
+              </select>
             </div>
-            <button type="button" class="btn btn-sm btn-secondary" id="ping-test-btn">
-              ⚡ RE-TEST LATENCY
+
+            <div class="form-row">
+              <label for="dev-os" class="form-label"
+                >OPERATING SYSTEM <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                id="dev-os"
+                name="os"
+                class="form-input"
+                placeholder="e.g. NixOS 26.05 / Arch"
+                required
+                maxlength="32"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="dev-ip" class="form-label"
+              >IP ADDRESS <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="dev-ip"
+              name="ip"
+              class="form-input"
+              placeholder="e.g. 192.168.1.55"
+              required
+              pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$"
+              title="Must be a valid IPv4 address"
+            />
+          </div>
+
+          <div class="form-telemetry-row">
+            <div class="telemetry-slider-col">
+              <label for="dev-cpu" class="slider-label"
+                >INIT CPU:
+                <span id="val-cpu" class="slider-num">20%</span></label
+              >
+              <input
+                type="range"
+                id="dev-cpu"
+                name="cpu"
+                min="0"
+                max="100"
+                value="20"
+                class="pixel-slider"
+              />
+            </div>
+            <div class="telemetry-slider-col">
+              <label for="dev-ram" class="slider-label"
+                >INIT RAM:
+                <span id="val-ram" class="slider-num">45%</span></label
+              >
+              <input
+                type="range"
+                id="dev-ram"
+                name="ram"
+                min="0"
+                max="100"
+                value="45"
+                class="pixel-slider"
+              />
+            </div>
+            <div class="telemetry-slider-col">
+              <label for="dev-battery" class="slider-label"
+                >BATTERY:
+                <span id="val-battery" class="slider-num">100%</span></label
+              >
+              <input
+                type="range"
+                id="dev-battery"
+                name="battery"
+                min="0"
+                max="100"
+                value="100"
+                class="pixel-slider"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancel-modal-btn"
+            >
+              CANCEL
+            </button>
+            <button type="submit" class="btn btn-primary" id="save-device-btn">
+              REGISTER DEVICE
             </button>
           </div>
-          <div class="card-body">
-            <div class="network-specs-grid" id="network-specs-container">
-              <!-- Injected via JavaScript -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Visual Block-Tree Topology -->
-        <div class="tactile-card topology-card">
-          <div class="card-header">
-            <div class="card-title-group">
-              <span class="pixel-icon">🌲</span>
-              <h2 class="card-title">NETWORK TOPOLOGY TREE</h2>
-            </div>
-            <span class="header-badge" id="topology-device-badge">LAN TREE</span>
-          </div>
-          <div class="card-body topology-body">
-            <div class="topology-wrapper" id="topology-tree-container">
-              <!-- Router Root Block -->
-              <div class="topology-root-container">
-                <div class="topology-node router-node">
-                  <div class="node-antenna-row">
-                    <span class="antenna"></span>
-                    <span class="antenna"></span>
-                  </div>
-                  <div class="node-header">
-                    <span class="node-type">GATEWAY ROUTER</span>
-                    <span class="status-pip online"></span>
-                  </div>
-                  <div class="node-title" id="topo-gateway-ssid">Home Wi-Fi Gateway</div>
-                  <div class="node-meta">
-                    <span class="node-ip" id="topo-gateway-ip">192.168.1.1</span>
-                    <span class="node-protocol">802.11ax / 5GHz</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Stepped Trunk Line -->
-              <div class="topology-trunk">
-                <div class="trunk-vertical"></div>
-                <div class="trunk-horizontal-bar" id="trunk-horizontal"></div>
-              </div>
-
-              <!-- Leaf Device Nodes -->
-              <div class="topology-leaves-container" id="topology-leaves">
-                <!-- Dynamically populated from JS -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- VIEW 4: SERVICES -->
-      <section class="view-panel" id="view-services" data-panel="services">
-        <div class="tactile-card services-card">
-          <div class="card-header">
-            <div class="card-title-group">
-              <span class="pixel-icon">⚙️</span>
-              <h2 class="card-title">SELF-HOSTED SERVICES REGISTRY</h2>
-            </div>
-            <span class="header-badge" id="services-badge-counter">3 ACTIVE</span>
-          </div>
-
-          <div class="card-body">
-            <div class="table-container">
-              <table class="tactile-table" id="services-table">
-                <thead>
-                  <tr>
-                    <th>SERVICE</th>
-                    <th>HOST DEVICE</th>
-                    <th>PORT</th>
-                    <th>PROTOCOL</th>
-                    <th>UPTIME</th>
-                    <th>STATUS</th>
-                    <th class="text-right">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody id="services-table-body">
-                  <!-- Injected via JavaScript -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="app-footer">
-      <div class="footer-left">
-        <span class="footer-dot"></span>
-        <span class="footer-text">REA LOCAL ENGINE · SECURE LOCALSTORAGE STORE</span>
+        </form>
       </div>
-      <div class="footer-right">
-        <span class="footer-shortcut">PRESS [ESC] TO CLOSE MODALS</span>
-      </div>
-    </footer>
-  </div>
-
-  <!-- MODAL: ADD DEVICE -->
-  <div class="modal-backdrop hidden" id="add-device-modal" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
-    <div class="modal-window">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="pixel-icon">➕</span>
-          <h2 class="modal-title" id="modal-add-title">REGISTER NEW DEVICE</h2>
-        </div>
-        <button type="button" class="modal-close-btn" id="close-modal-btn" aria-label="Close dialog">✕</button>
-      </div>
-
-      <form id="add-device-form" class="modal-form">
-        <div class="form-row">
-          <label for="dev-name" class="form-label">DEVICE NAME <span class="required">*</span></label>
-          <input type="text" id="dev-name" name="name" class="form-input" placeholder="e.g. Raspberry Pi 5" required maxlength="32">
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-row">
-            <label for="dev-type" class="form-label">TYPE <span class="required">*</span></label>
-            <select id="dev-type" name="type" class="form-select" required>
-              <option value="laptop">Laptop</option>
-              <option value="tablet">Tablet</option>
-              <option value="smartphone">Smartphone</option>
-              <option value="server">Server</option>
-              <option value="desktop">Desktop</option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <label for="dev-os" class="form-label">OPERATING SYSTEM <span class="required">*</span></label>
-            <input type="text" id="dev-os" name="os" class="form-input" placeholder="e.g. NixOS 26.05 / Arch" required maxlength="32">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label for="dev-ip" class="form-label">IP ADDRESS <span class="required">*</span></label>
-          <input type="text" id="dev-ip" name="ip" class="form-input" placeholder="e.g. 192.168.1.55" required pattern="^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$" title="Must be a valid IPv4 address">
-        </div>
-
-        <div class="form-telemetry-row">
-          <div class="telemetry-slider-col">
-            <label for="dev-cpu" class="slider-label">INIT CPU: <span id="val-cpu" class="slider-num">20%</span></label>
-            <input type="range" id="dev-cpu" name="cpu" min="0" max="100" value="20" class="pixel-slider">
-          </div>
-          <div class="telemetry-slider-col">
-            <label for="dev-ram" class="slider-label">INIT RAM: <span id="val-ram" class="slider-num">45%</span></label>
-            <input type="range" id="dev-ram" name="ram" min="0" max="100" value="45" class="pixel-slider">
-          </div>
-          <div class="telemetry-slider-col">
-            <label for="dev-battery" class="slider-label">BATTERY: <span id="val-battery" class="slider-num">100%</span></label>
-            <input type="range" id="dev-battery" name="battery" min="0" max="100" value="100" class="pixel-slider">
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cancel-modal-btn">CANCEL</button>
-          <button type="submit" class="btn btn-primary" id="save-device-btn">REGISTER DEVICE</button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <!-- TOAST NOTIFICATION CONTAINER -->
-  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
-  <!-- App Script -->
-  <script src="app.js"></script>
-</body>
+    <!-- App Script -->
+    <script src="app.js"></script>
+  </body>
 </html>
