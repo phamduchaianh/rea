@@ -31,7 +31,7 @@ const defaultData = {
       id: "dev-2",
       name: "Oppo Pad 3 Pro",
       type: "tablet",
-      os: "Android 15",
+      os: "Android 16",
       status: "offline",
       ip: "192.168.1.15",
       lastSeen: "2h ago",
@@ -43,13 +43,25 @@ const defaultData = {
       id: "dev-3",
       name: "iPhone 15 Pro",
       type: "smartphone",
-      os: "iOS 18.2",
+      os: "iOS 27.2",
       status: "online",
       ip: "192.168.1.12",
       lastSeen: "1m ago",
       cpu: 14,
       ram: 46,
       battery: 76,
+    },
+    {
+      id: "dev-4",
+      name: "Xiaomi Mi 15 Ultra",
+      type: "smartphone",
+      os: "Android 17",
+      status: "online",
+      ip: "192.168.1.14",
+      lastSeen: "7m ago",
+      cpu: 23,
+      ram: 20,
+      battery: 100,
     },
   ],
   services: [
@@ -107,6 +119,7 @@ function resetState() {
   localStorage.removeItem(STORAGE_KEY);
   const freshData = getState();
   renderDashboard();
+  renderDevices();
   console.log("[REA] State reset to default!");
   return freshData;
 }
@@ -139,9 +152,19 @@ document.getElementById("reset-demo-btn").addEventListener("click", () => {
 // ======================================================
 // 2. UI RENDER
 // ======================================================
+let currentDeviceFilter = "all";
+let currentSearchQuery = "";
 
+//------------------- SHARED HELPERS --------------------
+function renderSegments(percent) {
+  const filled = Math.round(percent / 10);
+  let html = "";
+  for (let i = 0; i < 10; i++) {
+    html += `<span class="segment ${i < filled ? "filled" : ""}"></span>`;
+  }
+  return html;
+}
 //---------------------- DASHBOARD ----------------------
-
 function renderDashboard() {
   // get length
   const state = getState();
@@ -168,7 +191,7 @@ function renderDashboard() {
     `/ ${state.network.latency} ping`;
   document.getElementById("kpi-service-count").textContent = runningService;
   document.getElementById("kpi-total-services").textContent =
-    `${state.services.length} RUNNING`;
+    `/ ${state.services.length} RUNNING`;
 
   // device overview
   document.getElementById("quick-devices-list").innerHTML = state.devices
@@ -217,7 +240,142 @@ function renderDashboard() {
   document.getElementById("kpi-net-ip").textContent = state.network.gateway;
 }
 
-//debug log
+//---------------------- DEVICES ----------------------
+function renderDevices() {
+  const state = getState();
+  const q = currentSearchQuery.toLowerCase();
 
+  const selectedDevices = state.devices.filter((dev) => {
+    const matchesStatus =
+      currentDeviceFilter === "all" || dev.status === currentDeviceFilter;
+    const matchesSearch =
+      dev.name.toLowerCase().includes(q) ||
+      dev.os.toLowerCase().includes(q) ||
+      dev.ip.toLowerCase().includes(q);
+    return matchesStatus && matchesSearch;
+  });
+  document
+    .getElementById("devices-empty-state")
+    .classList.toggle("hidden", selectedDevices.length > 0);
+  // ui
+  document.getElementById("devices-grid").innerHTML = selectedDevices
+    .map(
+      (dev) => `
+      <div class="device-card">
+        <div class="device-card-header">
+          <div class="device-title-row">
+            <span class="device-glyph">💻</span>
+            <div class="device-name-wrap">
+              <h3 class="device-name">${dev.name}</h3>
+              <span class="device-type-badge">${dev.type.toUpperCase()}</span>
+            </div>
+          </div>
+          <span class="status-badge ${dev.status}">
+            <span class="status-pip ${dev.status}"></span>
+            ${dev.status.toUpperCase()}
+          </span>
+        </div>
+
+        <div class="device-card-body">
+          <div class="device-meta-table">
+            <div class="meta-field">
+              <span class="meta-label">OS</span>
+              <span class="meta-value">${dev.os}</span>
+            </div>
+            <div class="meta-field">
+              <span class="meta-label">IP ADDRESS</span>
+              <span class="meta-value">${dev.ip}</span>
+            </div>
+          </div>
+
+          <div class="telemetry-group">
+            <div class="telemetry-item">
+              <div class="telemetry-label-row">
+                <span class="telemetry-name">CPU</span>
+                <span class="telemetry-val">${dev.cpu}%</span>
+              </div>
+              <div class="segment-bar">${renderSegments(dev.cpu)}</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label-row">
+                <span class="telemetry-name">RAM</span>
+                <span class="telemetry-val">${dev.ram}%</span>
+              </div>
+              <div class="segment-bar">${renderSegments(dev.ram)}</div>
+            </div>
+            <div class="telemetry-item">
+              <div class="telemetry-label-row">
+                <span class="telemetry-name">BATTERY</span>
+                <span class="telemetry-val">${dev.battery}%</span>
+              </div>
+              <div class="segment-bar">${renderSegments(dev.battery)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="device-card-footer">
+          <span class="last-seen-text">Seen: ${dev.lastSeen}</span>
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            data-action="toggle-status"
+            data-id="${dev.id}"
+          >
+            ${dev.status === "online" ? "SET OFFLINE" : "SET ONLINE"}
+          </button>
+        </div>
+      </div>`,
+    )
+    .join("");
+}
+// input search
+document
+  .getElementById("device-search-input")
+  .addEventListener("input", (e) => {
+    currentSearchQuery = e.target.value.trim();
+    renderDevices();
+  });
+// filter button
+function switchFilter(filterButton) {
+  //check name then toggle
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    const isMatch = btn.dataset.filter === filterButton;
+    btn.classList.toggle("active", isMatch);
+  });
+}
+// filter: click event
+document.querySelectorAll(".filter-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const clickedFilter = btn.dataset.filter;
+    switchFilter(clickedFilter);
+    currentDeviceFilter = clickedFilter;
+    renderDevices();
+  });
+});
+// toggle online, use for devcies-grid instead specific card
+document.getElementById("devices-grid").addEventListener("click", (e) => {
+  // click area detect
+  const toggleBtn = e.target.closest('[data-action="toggle-status"]');
+  if (!toggleBtn) return; // pass if other area
+  const deviceId = toggleBtn.dataset.id;
+  const state = getState();
+  const targetDevice = state.devices.find((dev) => dev.id === deviceId);
+  if (!targetDevice) return;
+  targetDevice.status = targetDevice.status === "online" ? "offline" : "online";
+  targetDevice.lastSeen = "Just now";
+  saveState(state);
+  renderAll();
+});
+// ======================================================
+// 3. MAIN
+// ======================================================
+//debug log
 console.log(getState());
-renderDashboard();
+function renderAll() {
+  renderDashboard();
+  renderDevices();
+  //renderNetworks
+  //renderServices
+}
+
+renderAll();
