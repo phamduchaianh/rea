@@ -118,8 +118,7 @@ function getState() {
 function resetState() {
   localStorage.removeItem(STORAGE_KEY);
   const freshData = getState();
-  renderDashboard();
-  renderDevices();
+  renderAll();
   console.log("[REA] State reset to default!");
   return freshData;
 }
@@ -164,6 +163,15 @@ function renderSegments(percent) {
   }
   return html;
 }
+function getDeviceIcon(type) {
+  const icons = {
+    laptop: "💻",
+    tablet: "📟",
+    smartphone: "📱",
+    server: "🖥️",
+  };
+  return icons[type] || "📦";
+}
 //---------------------- DASHBOARD ----------------------
 function renderDashboard() {
   // get length
@@ -199,7 +207,7 @@ function renderDashboard() {
       (dev) => `
     <div class="quick-device-item">
       <div class="qd-left">
-        <span class="qd-icon">💻</span>
+        <span class="qd-icon">${getDeviceIcon(dev.type)}</span>
         <div>
           <div class="qd-name">${dev.name}</div>
           <div class="qd-os">${dev.os}</div>
@@ -239,8 +247,7 @@ function renderDashboard() {
   document.getElementById("kpi-net-ssid").textContent = state.network.ssid;
   document.getElementById("kpi-net-ip").textContent = state.network.gateway;
 }
-
-//---------------------- DEVICES ----------------------
+//---------------------- DEVICES ------------------------
 function renderDevices() {
   const state = getState();
   const q = currentSearchQuery.toLowerCase();
@@ -366,6 +373,84 @@ document.getElementById("devices-grid").addEventListener("click", (e) => {
   saveState(state);
   renderAll();
 });
+
+//---------------------- NETWORKS -----------------------
+function renderNetworks() {
+  const state = getState();
+  const onlineCount = state.devices.filter(
+    (dev) => dev.status === "online",
+  ).length;
+
+  //update primary network interface
+  const networkSpecs = [
+    { label: "SSID", value: state.network.ssid, sub: "802.11ax · 5GHz" },
+    { label: "GATEWAY IP", value: state.network.gateway, sub: "Local Router" },
+    {
+      label: "DNS SERVER",
+      value: state.network.dns,
+      sub: "Cloudflare Primary",
+    },
+    {
+      label: "PUBLIC IP",
+      value: state.network.publicIp,
+      sub: "ISP WAN Address",
+    },
+    { label: "LATENCY", value: state.network.latency, sub: "Gateway RTT" },
+  ];
+  document.getElementById("network-specs-container").innerHTML = networkSpecs
+    .map(
+      (item) =>
+        `<div class="net-spec-block">
+      <span class="net-spec-label">${item.label}</span>
+      <span class="net-spec-value">${item.value}</span>
+      <span class="net-spec-sub">${item.sub}</span>
+    </div>`,
+    )
+    .join("");
+
+  // update network topology tree
+  document.getElementById("topo-gateway-ssid").textContent = state.network.ssid;
+  document.getElementById("topo-gateway-ip").textContent =
+    state.network.gateway;
+  document.getElementById("topology-device-badge").innerHTML =
+    `${onlineCount} ONLINE / ${state.devices.length} NODES`;
+
+  document.getElementById("topology-leaves").innerHTML = state.devices
+    .map(
+      (dev) => `<div class="topology-leaf-item">
+  <div class="leaf-drop-line"></div>
+  <div class="leaf-node">
+    <div class="leaf-node-top">
+      <span class="leaf-name">${dev.name}</span>
+      <span class="status-pip ${dev.status}"></span>
+    </div>
+    <div class="leaf-node-sub">
+      <span>${dev.ip}</span>
+      <span>${dev.status.toUpperCase()}</span>
+    </div>
+  </div>
+</div>`,
+    )
+    .join("");
+}
+// re-test latency
+document.getElementById("ping-test-btn").addEventListener("click", () => {
+  const state = getState();
+  //random, add login backend in v0.2
+  const randomMs = Math.floor(Math.random() * 15) + 8;
+  const newLatency = `${randomMs}ms`;
+
+  state.network.latency = newLatency;
+  //log activity
+  state.activities.unshift({
+    id: `act-${Date.now()}`,
+    text: `Network latency tested: ${newLatency}`,
+    timestamp: "Just now",
+    type: "network",
+  });
+  saveState(state);
+  renderAll();
+});
 // ======================================================
 // 3. MAIN
 // ======================================================
@@ -374,7 +459,7 @@ console.log(getState());
 function renderAll() {
   renderDashboard();
   renderDevices();
-  //renderNetworks
+  renderNetworks();
   //renderServices
 }
 

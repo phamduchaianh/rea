@@ -8,42 +8,42 @@
    -------------------------------------------------------------------------- */
 :root {
   /* Canvas & Grid */
-  --bg-canvas: #F0F8FF;             /* Soft Cloud Sky */
-  --grid-dot: #BAE6FD;              /* Pixel grid dot pattern */
-  
+  --bg-canvas: #f0f8ff; /* Soft Cloud Sky */
+  --grid-dot: #bae6fd; /* Pixel grid dot pattern */
+
   /* Surfaces */
-  --surface-white: #FFFFFF;         /* Pure Cloud White */
-  --surface-ice: #E0F2FE;           /* Pale Ice Blue */
-  --surface-hover: #F0F9FF;         /* Ultra-light Sky Tint */
-  --surface-muted: #F8FAFC;         /* Light slate tint */
-  
+  --surface-white: #ffffff; /* Pure Cloud White */
+  --surface-ice: #e0f2fe; /* Pale Ice Blue */
+  --surface-hover: #f0f9ff; /* Ultra-light Sky Tint */
+  --surface-muted: #f8fafc; /* Light slate tint */
+
   /* Primary Text & Outlines */
-  --navy-slate: #1E3A5F;           /* Deep Navy Slate (crisp borders & text) */
-  --navy-muted: #5B708B;           /* Muted navy for secondary details */
-  --navy-light: #94A3B8;           /* Muted slate for placeholders */
-  
+  --navy-slate: #1e3a5f; /* Deep Navy Slate (crisp borders & text) */
+  --navy-muted: #5b708b; /* Muted navy for secondary details */
+  --navy-light: #94a3b8; /* Muted slate for placeholders */
+
   /* Cinnamoroll Sky Blue Accents */
-  --sky-blue: #38BDF8;             /* Cinnamoroll Sky Blue */
-  --sky-blue-hover: #0284C7;       /* Deep Sky Blue for hover states */
-  --sky-blue-shadow: #BAE6FD;      /* Hard-edge 4px card shadow */
-  --sky-blue-subtle: #E0F2FE;      /* Soft accent tint */
-  
+  --sky-blue: #38bdf8; /* Cinnamoroll Sky Blue */
+  --sky-blue-hover: #0284c7; /* Deep Sky Blue for hover states */
+  --sky-blue-shadow: #bae6fd; /* Hard-edge 4px card shadow */
+  --sky-blue-subtle: #e0f2fe; /* Soft accent tint */
+
   /* Pastel Blush Highlights */
-  --blush: #FBCFE8;                /* Soft Pastel Blush */
-  --blush-dark: #F472B6;           /* Active Blush accent */
-  --blush-light: #FDF2F8;          /* Ultra-soft blush surface */
-  
+  --blush: #fbcfe8; /* Soft Pastel Blush */
+  --blush-dark: #f472b6; /* Active Blush accent */
+  --blush-light: #fdf2f8; /* Ultra-soft blush surface */
+
   /* Status Colors */
-  --status-online: #10B981;        /* Mint Emerald */
-  --status-online-bg: #D1FAE5;     /* Mint Emerald tint */
-  --status-offline: #F43F5E;       /* Coral Rose */
-  --status-offline-bg: #FFE4E6;    /* Coral Rose tint */
-  --status-warn: #F59E0B;          /* Soft Amber */
-  --status-warn-bg: #FEF3C7;       /* Soft Amber tint */
+  --status-online: #10b981; /* Mint Emerald */
+  --status-online-bg: #d1fae5; /* Mint Emerald tint */
+  --status-offline: #f43f5e; /* Coral Rose */
+  --status-offline-bg: #ffe4e6; /* Coral Rose tint */
+  --status-warn: #f59e0b; /* Soft Amber */
+  --status-warn-bg: #fef3c7; /* Soft Amber tint */
 
   /* Typography */
-  --font-display: 'Silkscreen', monospace;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: "Silkscreen", monospace;
+  --font-mono: "JetBrains Mono", monospace;
 
   /* Tactile Spacing & Borders */
   --border-thick: 2px solid var(--navy-slate);
@@ -57,13 +57,16 @@
 /* --------------------------------------------------------------------------
    2. Reset & Base Typography
    -------------------------------------------------------------------------- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
   font-family: var(--font-mono);
   font-size: 14px;
@@ -192,7 +195,9 @@ html, body {
   background-color: var(--sky-blue);
   color: var(--surface-white);
   border-color: var(--navy-slate);
-  box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.15), var(--shadow-btn);
+  box-shadow:
+    inset 2px 2px 0px rgba(0, 0, 0, 0.15),
+    var(--shadow-btn);
 }
 
 .tab-btn.active .badge {
@@ -258,9 +263,18 @@ html, body {
 }
 
 @keyframes pulseGlow {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.8; }
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -310,7 +324,7 @@ html, body {
 }
 
 .btn-secondary:hover {
-  background-color: #BAE6FD;
+  background-color: #bae6fd;
 }
 
 .btn-outline {
@@ -328,7 +342,7 @@ html, body {
 }
 
 .btn-danger:hover {
-  background-color: #E11D48;
+  background-color: #e11d48;
 }
 
 .btn-sm {
@@ -353,8 +367,14 @@ html, body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -596,9 +616,9 @@ html, body {
   padding: 10px 12px;
   background-color: var(--surface-muted);
   border-left: 4px solid var(--sky-blue);
-  border-top: 1px solid #CBD5E1;
-  border-right: 1px solid #CBD5E1;
-  border-bottom: 1px solid #CBD5E1;
+  border-top: 1px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
   border-radius: 2px;
   font-family: var(--font-mono);
   font-size: 12px;
@@ -743,7 +763,9 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
 }
 
 .device-card:hover {
@@ -841,7 +863,7 @@ html, body {
   gap: 8px;
   padding: 8px 10px;
   background-color: var(--surface-muted);
-  border: 1px solid #CBD5E1;
+  border: 1px solid #cbd5e1;
   border-radius: 2px;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -908,7 +930,7 @@ html, body {
 .segment {
   flex: 1;
   height: 100%;
-  background-color: #E2E8F0;
+  background-color: #e2e8f0;
   border: 1px solid var(--navy-slate);
   border-radius: 1px;
   transition: background-color 0.15s ease;
@@ -1096,7 +1118,7 @@ html, body {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--navy-muted);
-  border-top: 1px dashed #CBD5E1;
+  border-top: 1px dashed #cbd5e1;
   padding-top: 4px;
 }
 
@@ -1208,7 +1230,7 @@ html, body {
 
 .tactile-table td {
   padding: 12px 14px;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #e2e8f0;
   color: var(--navy-slate);
   vertical-align: middle;
 }
@@ -1248,7 +1270,7 @@ html, body {
   font-family: var(--font-mono);
   font-weight: 700;
   color: var(--navy-slate);
-  background-color: #FEF3C7;
+  background-color: #fef3c7;
   border: 1px solid var(--navy-slate);
   border-radius: 2px;
   padding: 1px 6px;
@@ -1287,8 +1309,14 @@ html, body {
 }
 
 @keyframes modalPop {
-  from { transform: scale(0.96); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .modal-header {
@@ -1357,7 +1385,8 @@ html, body {
   color: var(--status-offline);
 }
 
-.form-input, .form-select {
+.form-input,
+.form-select {
   padding: 8px 12px;
   background-color: var(--surface-muted);
   border: var(--border-thick);
@@ -1369,7 +1398,8 @@ html, body {
   transition: border-color 0.1s;
 }
 
-.form-input:focus, .form-select:focus {
+.form-input:focus,
+.form-select:focus {
   background-color: var(--surface-white);
   border-color: var(--sky-blue);
   box-shadow: 0 0 0 1px var(--sky-blue);
@@ -1413,7 +1443,7 @@ html, body {
   justify-content: flex-end;
   gap: 10px;
   padding-top: 10px;
-  border-top: 1px dashed #CBD5E1;
+  border-top: 1px dashed #cbd5e1;
 }
 
 /* --------------------------------------------------------------------------
@@ -1460,8 +1490,14 @@ html, body {
 }
 
 @keyframes toastSlideIn {
-  from { transform: translateX(30px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* --------------------------------------------------------------------------
