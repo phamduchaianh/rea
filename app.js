@@ -415,21 +415,22 @@ function renderNetworks() {
   document.getElementById("topology-device-badge").innerHTML =
     `${onlineCount} ONLINE / ${state.devices.length} NODES`;
 
+  //update leaves
   document.getElementById("topology-leaves").innerHTML = state.devices
     .map(
       (dev) => `<div class="topology-leaf-item">
-  <div class="leaf-drop-line"></div>
-  <div class="leaf-node">
-    <div class="leaf-node-top">
-      <span class="leaf-name">${dev.name}</span>
-      <span class="status-pip ${dev.status}"></span>
-    </div>
-    <div class="leaf-node-sub">
-      <span>${dev.ip}</span>
-      <span>${dev.status.toUpperCase()}</span>
-    </div>
-  </div>
-</div>`,
+      <div class="leaf-drop-line"></div>
+      <div class="leaf-node">
+        <div class="leaf-node-top">
+          <span class="leaf-name">${dev.name}</span>
+          <span class="status-pip ${dev.status}"></span>
+        </div>
+        <div class="leaf-node-sub">
+          <span>${dev.ip}</span>
+          <span>${dev.status.toUpperCase()}</span>
+        </div>
+      </div>
+    </div>`,
     )
     .join("");
 }
@@ -451,6 +452,90 @@ document.getElementById("ping-test-btn").addEventListener("click", () => {
   saveState(state);
   renderAll();
 });
+
+//---------------------- SERVICES -----------------------
+function renderServices() {
+  const state = getState();
+  const runningCount = state.services.filter(
+    (srv) => srv.status === "running",
+  ).length;
+
+  document.getElementById("services-badge-counter").textContent =
+    `${runningCount} ACTIVE`;
+
+  document.getElementById("services-table-body").innerHTML = state.services
+    .map((srv) => {
+      const hostDevice = state.devices.find((d) => d.id === srv.deviceId);
+      //if hostdevice exist then bind icon+name, else unknown
+      const hostLabel = hostDevice
+        ? `${getDeviceIcon(hostDevice.type)} ${hostDevice.name}`
+        : "Unknown Host";
+
+      const statusClass = srv.status === "running" ? "online" : "offline";
+
+      return `
+        <tr>
+          <td>
+            <div class="service-name-cell">
+              <span class="service-title">${srv.name}</span>
+              <span class="service-desc">${srv.description}</span>
+            </div>
+          </td>
+          <td>
+            <span class="host-badge">${hostLabel}</span>
+          </td>
+          <td>
+            <span class="port-badge">${srv.port}</span>
+          </td>
+          <td>${srv.protocol}</td>
+          <td>${srv.uptime}</td>
+          <td>
+            <span class="status-badge ${statusClass}">
+              <span class="status-pip ${statusClass}"></span>
+              ${srv.status.toUpperCase()}
+            </span>
+          </td>
+          <td class="text-right">
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              data-action="toggle-service"
+              data-id="${srv.id}"
+            >
+              ${srv.status === "running" ? "STOP" : "START"}
+            </button>
+          </td>
+        </tr>`;
+    })
+    .join("");
+}
+//service status toggle
+document
+  .getElementById("services-table-body")
+  .addEventListener("click", (e) => {
+    const toggleBtn = e.target.closest('[data-action="toggle-service"]');
+    if (!toggleBtn) return;
+
+    const serviceId = toggleBtn.dataset.id;
+    const state = getState();
+    const targetService = state.services.find((srv) => srv.id === serviceId);
+    if (!targetService) return;
+
+    // toggle state
+    const isRunning = targetService.status === "running";
+    targetService.status = isRunning ? "stopped" : "running";
+    targetService.uptime = isRunning ? "0m" : "Just started";
+
+    //activities log
+    state.activities.unshift({
+      id: `act-${Date.now()}`,
+      text: `${targetService.name} service ${targetService.status}`,
+      timestamp: "Just now",
+      type: "service",
+    });
+    saveState(state);
+    renderAll();
+  });
 // ======================================================
 // 3. MAIN
 // ======================================================
@@ -460,7 +545,7 @@ function renderAll() {
   renderDashboard();
   renderDevices();
   renderNetworks();
-  //renderServices
+  renderServices();
 }
 
 renderAll();
