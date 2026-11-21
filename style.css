@@ -1564,3 +1564,14 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--sky-blue-hover);
 }
+
+/* --------------------------------------------------------------------------
+   16. Iconify Web Component Baseline
+   -------------------------------------------------------------------------- */
+iconify-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  font-size: 1.15em;
+}

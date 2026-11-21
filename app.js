@@ -170,13 +170,16 @@ function renderSegments(percent) {
 }
 function getDeviceIcon(type) {
   const icons = {
-    laptop: "💻",
-    tablet: "📟",
-    smartphone: "📱",
-    server: "🖥️",
-    desktop: "🖥️",
+    laptop: '<iconify-icon icon="pixelarticons:laptop"></iconify-icon>',
+    tablet: '<iconify-icon icon="pixelarticons:device-tablet"></iconify-icon>',
+    smartphone:
+      '<iconify-icon icon="pixelarticons:device-phone"></iconify-icon>',
+    server: '<iconify-icon icon="pixelarticons:server"></iconify-icon>',
+    desktop: '<iconify-icon icon="pixelarticons:monitor"></iconify-icon>',
   };
-  return icons[type] || "📦";
+  return (
+    icons[type] || '<iconify-icon icon="pixelarticons:archive"></iconify-icon>'
+  );
 }
 //---------------------- DASHBOARD ----------------------
 function renderDashboard() {
@@ -202,7 +205,7 @@ function renderDashboard() {
   document.getElementById("kpi-net-status").textContent =
     `${state.network.status.toUpperCase()}`;
   document.getElementById("kpi-net-latency").textContent =
-    `/ ${state.network.latency} ping`;
+    `${state.network.latency} ping`;
   document.getElementById("kpi-service-count").textContent = runningService;
   document.getElementById("kpi-total-services").textContent =
     `/ ${state.services.length} RUNNING`;
@@ -249,7 +252,7 @@ function renderDashboard() {
     .map(
       (act) => `
     <div class="activity-item type-${act.type}">
-      <span class="activity-icon">📜</span>
+      <span class="activity-icon"><iconify-icon icon="pixelarticons:script"></iconify-icon></span>
       <div class="activity-content">
         <div class="activity-text">${act.text}</div>
         <div class="activity-time">${act.timestamp}</div>
@@ -384,9 +387,18 @@ document.getElementById("devices-grid").addEventListener("click", (e) => {
   const deviceId = toggleBtn.dataset.id;
   const state = getState();
   const targetDevice = state.devices.find((dev) => dev.id === deviceId);
+
   if (!targetDevice) return;
   targetDevice.status = targetDevice.status === "online" ? "offline" : "online";
   targetDevice.lastSeen = "Just now";
+
+  state.activities.unshift({
+    id: `act-${Date.now()}`,
+    text: `${targetDevice.name} went ${targetDevice.status}`,
+    timestamp: "Just now",
+    type: "device",
+  });
+
   saveState(state);
   renderAll();
 });
@@ -634,8 +646,6 @@ document
 // ======================================================
 // 3. MAIN
 // ======================================================
-//debug log
-console.log(getState());
 function renderAll() {
   renderDashboard();
   renderDevices();
