@@ -147,7 +147,12 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
 document.getElementById("reset-demo-btn").addEventListener("click", () => {
   resetState();
 });
-
+//view all on dashboard
+document.querySelectorAll(".nav-jump-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    switchTab(btn.dataset.jump);
+  });
+});
 // ======================================================
 // 2. UI RENDER
 // ======================================================
@@ -169,6 +174,7 @@ function getDeviceIcon(type) {
     tablet: "📟",
     smartphone: "📱",
     server: "🖥️",
+    desktop: "🖥️",
   };
   return icons[type] || "📦";
 }
@@ -200,7 +206,18 @@ function renderDashboard() {
   document.getElementById("kpi-service-count").textContent = runningService;
   document.getElementById("kpi-total-services").textContent =
     `/ ${state.services.length} RUNNING`;
+  //render segments
+  const devicePercent =
+    state.devices.length > 0 ? (onlineDevices / state.devices.length) * 100 : 0;
+  const servicePercent =
+    state.services.length > 0
+      ? (runningService / state.services.length) * 100
+      : 0;
 
+  document.getElementById("kpi-device-meter").innerHTML =
+    renderSegments(devicePercent);
+  document.getElementById("kpi-service-meter").innerHTML =
+    renderSegments(servicePercent);
   // device overview
   document.getElementById("quick-devices-list").innerHTML = state.devices
     .map(
@@ -271,7 +288,7 @@ function renderDevices() {
       <div class="device-card">
         <div class="device-card-header">
           <div class="device-title-row">
-            <span class="device-glyph">💻</span>
+            <span class="device-glyph">${getDeviceIcon(dev.type)}</span>
             <div class="device-name-wrap">
               <h3 class="device-name">${dev.name}</h3>
               <span class="device-type-badge">${dev.type.toUpperCase()}</span>
@@ -374,6 +391,84 @@ document.getElementById("devices-grid").addEventListener("click", (e) => {
   renderAll();
 });
 
+// FOR TESTING PURPOSE BEFORE IT HAS REAL BACKEND
+// open add device form
+document
+  .getElementById("open-add-device-modal")
+  .addEventListener("click", (e) => {
+    document.getElementById("add-device-modal").classList.remove("hidden");
+  });
+//close add device form
+function closeAddModal() {
+  document.getElementById("add-device-modal").classList.add("hidden");
+  document.getElementById("add-device-form").reset();
+  document.getElementById("val-cpu").textContent = "20%";
+  document.getElementById("val-ram").textContent = "45%";
+  document.getElementById("val-battery").textContent = "100%";
+}
+//slider
+document.getElementById("add-device-modal").addEventListener("input", (e) => {
+  if (e.target.type !== "range") {
+    return;
+  }
+  document.getElementById(e.target.id.replace("dev-", "val-")).textContent =
+    e.target.value + "%";
+});
+//close form cases
+document.getElementById("close-modal-btn").addEventListener("click", () => {
+  closeAddModal();
+});
+document.getElementById("cancel-modal-btn").addEventListener("click", () => {
+  closeAddModal();
+});
+document.getElementById("add-device-modal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) {
+    closeAddModal();
+  }
+});
+//submit form
+document.getElementById("add-device-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const state = getState();
+  const devName = document.getElementById("dev-name").value.trim();
+  const devOs = document.getElementById("dev-os").value.trim();
+  const devIp = document.getElementById("dev-ip").value.trim();
+  const devType = document.getElementById("dev-type").value;
+  const devCpu = Number(document.getElementById("dev-cpu").value);
+  const devRam = Number(document.getElementById("dev-ram").value);
+  const devBattery = Number(document.getElementById("dev-battery").value);
+
+  const newDev = {
+    id: `dev-${Date.now()}`,
+    name: devName,
+    type: devType,
+    os: devOs,
+    status: "online",
+    ip: devIp,
+    lastSeen: "Just now",
+    cpu: devCpu,
+    ram: devRam,
+    battery: devBattery,
+  };
+
+  state.devices.push(newDev);
+  state.activities.unshift({
+    id: `act-${Date.now()}`,
+    text: `${devName} (${devIp}) registered to network`,
+    timestamp: "Just now",
+    type: "device",
+  });
+
+  saveState(state);
+  renderAll();
+  closeAddModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeAddModal();
+  }
+});
 //---------------------- NETWORKS -----------------------
 function renderNetworks() {
   const state = getState();
