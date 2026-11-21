@@ -209,18 +209,23 @@ function renderDashboard() {
   document.getElementById("kpi-service-count").textContent = runningService;
   document.getElementById("kpi-total-services").textContent =
     `/ ${state.services.length} RUNNING`;
-  //render segments
-  const devicePercent =
-    state.devices.length > 0 ? (onlineDevices / state.devices.length) * 100 : 0;
-  const servicePercent =
-    state.services.length > 0
-      ? (runningService / state.services.length) * 100
-      : 0;
 
-  document.getElementById("kpi-device-meter").innerHTML =
-    renderSegments(devicePercent);
-  document.getElementById("kpi-service-meter").innerHTML =
-    renderSegments(servicePercent);
+  //idk XD LOL
+  const offlineDevices = state.devices.length - onlineDevices;
+  const stoppedServices = state.services.length - runningService;
+  const activePorts = state.services
+    .filter((s) => s.status === "running")
+    .map((s) => s.port)
+    .join(", ");
+
+  document.getElementById("kpi-offline-count").textContent =
+    `${offlineDevices} OFFLINE`;
+  document.getElementById("kpi-stopped-count").textContent =
+    `${stoppedServices} STOPPED`;
+  document.getElementById("kpi-active-ports").textContent = activePorts
+    ? `PORTS: ${activePorts}`
+    : "NO ACTIVE PORTS";
+
   // device overview
   document.getElementById("quick-devices-list").innerHTML = state.devices
     .map(
